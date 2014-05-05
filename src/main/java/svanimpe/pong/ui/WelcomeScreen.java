@@ -27,7 +27,7 @@ import static svanimpe.pong.Constants.*;
 
 public class WelcomeScreen extends Pane
 {
-    private Runnable onStart = () -> {}; /* Do nothing for now */
+    private Runnable onStart = () -> {}; /* Do nothing for now. */
     
     public void setOnStart(Runnable onStart)
     {
@@ -41,10 +41,11 @@ public class WelcomeScreen extends Pane
         {
             /*
              * When using CSS, the width and height (with CSS applied) aren't available right away.
-             * Therefore, we listen for changes and update the position once the width and height are available.
+             * Therefore, we listen for changes and update the position once the width and height
+             * are available.
              */
-            header.setTranslateX((WIDTH - header.getBoundsInLocal().getWidth()) / 2);
-            header.setTranslateY(MARGIN_TOP_BOTTOM + TEXT_INSETS_TOP_BOTTOM);
+            header.setTranslateX((WIDTH - header.getBoundsInLocal().getWidth()) / 2); /* Centered. */
+            header.setTranslateY(TEXT_MARGIN_TOP_BOTTOM);
         });
         header.getStyleClass().add("header");
         
@@ -53,10 +54,11 @@ public class WelcomeScreen extends Pane
         {
             /*
              * When using CSS, the width and height (with CSS applied) aren't available right away.
-             * Therefore, we listen for changes and update the position once the width and height are available.
+             * Therefore, we listen for changes and update the position once the width and height
+             * are available.
              */
-            info.setTranslateX((WIDTH - info.getBoundsInLocal().getWidth()) / 2);
-            info.setTranslateY(HEIGHT - MARGIN_TOP_BOTTOM - TEXT_INSETS_TOP_BOTTOM - info.getBoundsInLocal().getHeight());
+            info.setTranslateX((WIDTH - info.getBoundsInLocal().getWidth()) / 2); /* Centered. */
+            info.setTranslateY(HEIGHT - TEXT_MARGIN_TOP_BOTTOM - info.getBoundsInLocal().getHeight());
         });
         info.getStyleClass().add("info");
         

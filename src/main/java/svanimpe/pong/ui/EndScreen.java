@@ -27,7 +27,7 @@ import static svanimpe.pong.Constants.*;
 
 public class EndScreen extends Pane
 {
-    private Runnable onRestart = () -> {}; /* Do nothing for now */
+    private Runnable onRestart = () -> {}; /* Do nothing for now. */
     
     public void setOnRestart(Runnable onRestart)
     {
@@ -38,7 +38,7 @@ public class EndScreen extends Pane
     
     public void setScore(int playerScore)
     {
-        header.setText(playerScore == MAX_SCORE ? "you win" : "you lose");
+        header.setText(playerScore == WINNING_SCORE ? "you win" : "you lose");
     }
     
     public EndScreen()
@@ -47,10 +47,11 @@ public class EndScreen extends Pane
         {
             /*
              * When using CSS, the width and height (with CSS applied) aren't available right away.
-             * Therefore, we listen for changes and update the position once the width and height are available.
+             * Therefore, we listen for changes and update the position once the width and height
+             * are available.
              */
-            header.setTranslateX((WIDTH - header.getBoundsInLocal().getWidth()) / 2);
-            header.setTranslateY(MARGIN_TOP_BOTTOM + TEXT_INSETS_TOP_BOTTOM);
+            header.setTranslateX((WIDTH - header.getBoundsInLocal().getWidth()) / 2); /* Centered. */
+            header.setTranslateY(TEXT_MARGIN_TOP_BOTTOM);
         });
         header.getStyleClass().add("header");
         
@@ -59,10 +60,11 @@ public class EndScreen extends Pane
         {
             /*
              * When using CSS, the width and height (with CSS applied) aren't available right away.
-             * Therefore, we listen for changes and update the position once the width and height are available.
+             * Therefore, we listen for changes and update the position once the width and height
+             * are available.
              */
-            info.setTranslateX((WIDTH - info.getBoundsInLocal().getWidth()) / 2);
-            info.setTranslateY(HEIGHT - MARGIN_TOP_BOTTOM - TEXT_INSETS_TOP_BOTTOM - info.getBoundsInLocal().getHeight());
+            info.setTranslateX((WIDTH - info.getBoundsInLocal().getWidth()) / 2); /* Centered. */
+            info.setTranslateY(HEIGHT - TEXT_MARGIN_TOP_BOTTOM - info.getBoundsInLocal().getHeight());
         });
         info.getStyleClass().add("info");
         

@@ -23,7 +23,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 
 public class Paddle extends GameObject
 {
-    /* Construction and final properties */
+    /* --- Construction and final properties --- */
     
     private final double speed;
 
@@ -31,8 +31,13 @@ public class Paddle extends GameObject
     {
         this.speed = speed;
     }
+
+    public double getSpeed()
+    {
+        return speed;
+    }
     
-    /* Movement (as seen by the user, meaning up refers to the negative y-direction) */
+    /* --- Movement (as seen by the user, meaning UP refers to the negative y-direction) --- */
     
     public enum Movement
     {
@@ -51,7 +56,7 @@ public class Paddle extends GameObject
         this.movement = movement;
     }
     
-    /* Score */
+    /* --- Score --- */
     
     private final IntegerProperty score = new SimpleIntegerProperty(0);
     
@@ -70,7 +75,7 @@ public class Paddle extends GameObject
         return score;
     }
     
-    /* Update */
+    /* --- Update --- */
     
     @Override
     public void update(double deltaTime)

@@ -61,16 +61,17 @@ public class GameScreen extends Pane
         {
             /*
              * When using CSS, the width and height (with CSS applied) aren't available right away.
-             * Therefore, we listen for changes and update the position once the width and height are available.
+             * Therefore, we listen for changes and update the position once the width and height
+             * are available.
              */
             playerScore.setTranslateX(WIDTH / 2 - SCORE_SPACING / 2 - playerScore.getBoundsInLocal().getWidth());
         });
-        playerScore.setTranslateY(MARGIN_TOP_BOTTOM + TEXT_INSETS_TOP_BOTTOM);
+        playerScore.setTranslateY(TEXT_MARGIN_TOP_BOTTOM);
         playerScore.getStyleClass().add("score");
         
         opponentScore.textProperty().bind(game.getOpponent().scoreProperty().asString());
         opponentScore.setTranslateX(WIDTH / 2 + SCORE_SPACING / 2);
-        opponentScore.setTranslateY(MARGIN_TOP_BOTTOM + TEXT_INSETS_TOP_BOTTOM);
+        opponentScore.setTranslateY(TEXT_MARGIN_TOP_BOTTOM);
         opponentScore.getStyleClass().add("score");
         
         setPrefSize(WIDTH, HEIGHT);

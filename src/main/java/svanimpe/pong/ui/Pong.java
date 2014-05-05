@@ -31,9 +31,9 @@ public class Pong extends Application
     @Override
     public void start(Stage stage)
     {
-        Font.loadFont(getClass().getResourceAsStream("/arcade-normal.ttf"), 0); /* Arcade Normal */
+        Font.loadFont(getClass().getResourceAsStream("/arcade-normal.ttf"), 0); /* Font family 'Arcade Normal' in CSS. */
         
-        Game game = new Game(MAX_SCORE);
+        Game game = new Game(WINNING_SCORE);
         
         GameScreen gameScreen = new GameScreen(game);
         WelcomeScreen welcomeScreen = new WelcomeScreen();
@@ -68,7 +68,7 @@ public class Pong extends Application
         stage.setResizable(false);
         stage.show();
         
-        welcomeScreen.requestFocus(); /* This step is necessary to receive keyboard input */
+        welcomeScreen.requestFocus(); /* This step is necessary to receive keyboard input. */
     }
     
     public static void main(String... args)

@@ -30,20 +30,29 @@ import static svanimpe.pong.Constants.*;
 
 public class Game
 {
-    /* Construction and final properties */
+    /* --- Construction and final properties --- */
     
-    private final Random random = new Random();
+    private static final Random random = new Random();
     
-    private final int maxScore;
+    private final int winningScore;
     
     public Game(int maxScore)
     {
-        this.maxScore = maxScore;
+        this.winningScore = maxScore;
         loop.start();
     }
+
+    public int getWinningScore()
+    {
+        return winningScore;
+    }
     
-    /* Game loop */
+    /* --- Game loop --- */
     
+    /*
+     * This is an implementation of a game loop using variable time steps. See the blog posts on
+     * game loops in JavaFX for more information.
+     */
     private class GameLoop extends AnimationTimer
     {
         private long previousTime = 0;
@@ -51,15 +60,21 @@ public class Game
         @Override
         public void handle(long currentTime)
         {
+            /*
+             * If this is the first frame, simply record an initial time.
+             */
             if (previousTime == 0) {
-                previousTime = currentTime; /* Not much else to do at the start of the first frame */
+                previousTime = currentTime;
                 return;
             }
 
-            double secondsElapsed = (currentTime - previousTime) / 1_000_000_000.0; /* Convert nanoseconds to seconds */
+            double secondsElapsed = (currentTime - previousTime) / 1_000_000_000.0; /* Convert nanoseconds to seconds. */
 
-            if (secondsElapsed > 0.05) {
-                secondsElapsed = 0.05; /* Avoid large time steps by imposing an upper bound */
+            /*
+             * Avoid large time steps by imposing an upper bound.
+             */
+            if (secondsElapsed > 0.0333) {
+                secondsElapsed = 0.0333;
             }
             
             updateGame(secondsElapsed);
@@ -70,7 +85,7 @@ public class Game
     
     private final GameLoop loop = new GameLoop();
     
-    /* State */
+    /* --- State --- */
     
     public enum State
     {
@@ -84,7 +99,7 @@ public class Game
         return state;
     }
 
-    private Runnable onGameEnd = () -> {}; /* Do nothing for now */
+    private Runnable onGameEnd = () -> {}; /* Do nothing for now. */
     
     public void setOnGameEnd(Runnable onGameEnd)
     {
@@ -93,11 +108,11 @@ public class Game
     
     public void start()
     {
-        player.setX(MARGIN_LEFT_RIGHT + GOAL_WIDTH - PADDLE_WIDTH);
-        player.setY((HEIGHT - PADDLE_HEIGHT) / 2);
+        player.setX(MARGIN_LEFT_RIGHT + GOAL_WIDTH - PADDLE_WIDTH); /* Aligned with the goal area. */
+        player.setY((HEIGHT - PADDLE_HEIGHT) / 2); /* Centered. */
         
-        opponent.setX(WIDTH - MARGIN_LEFT_RIGHT - GOAL_WIDTH);
-        opponent.setY((HEIGHT - PADDLE_HEIGHT) / 2);
+        opponent.setX(WIDTH - MARGIN_LEFT_RIGHT - GOAL_WIDTH); /* Aligned with the goal area. */
+        opponent.setY((HEIGHT - PADDLE_HEIGHT) / 2); /* Centered. */
         
         player.setScore(0);
         opponent.setScore(0);
@@ -122,12 +137,12 @@ public class Game
     public void forfeit()
     {
         player.setScore(0);
-        opponent.setScore(maxScore);
+        opponent.setScore(winningScore);
         state = State.ENDED;
         onGameEnd.run();
     }
     
-    /* Ball */
+    /* --- Ball --- */
     
     private final Ball ball = new Ball(BALL_MAX_SPEED);
 
@@ -139,15 +154,15 @@ public class Game
     public void launchBall()
     {
         boolean towardsOpponent = random.nextBoolean();
-        double initialAngle = PADDLE_SECTION_ANGLES[random.nextInt(2) + 1]; /* We don't use the steepest angle */
+        double initialAngle = PADDLE_SECTION_ANGLES[random.nextInt(2) + 1]; /* We don't use the steepest angle. */
         
         ball.setSpeed(towardsOpponent ? -BALL_INITIAL_SPEED : BALL_INITIAL_SPEED);
         ball.setAngle(towardsOpponent ? -initialAngle : initialAngle);
-        ball.setX((WIDTH - BALL_SIZE) / 2);
+        ball.setX((WIDTH - BALL_SIZE) / 2); /* Centered. */
         ball.setY(MARGIN_TOP_BOTTOM);
     }
     
-    /* Player */
+    /* --- Player --- */
     
     private final Paddle player = new Paddle(PLAYER_PADDLE_SPEED);
     
@@ -156,10 +171,9 @@ public class Game
         return player;
     }
     
-    /* Opponent */
+    /* --- Opponent --- */
     
     private final Paddle opponent = new Paddle(OPPONENT_PADDLE_SPEED);
-    
     private final PaddleAi ai = new DefaultAi(opponent, this);
     
     public Paddle getOpponent()
@@ -167,12 +181,12 @@ public class Game
         return opponent;
     }
     
-    /* Update */
+    /* --- Update --- */
     
     private void updateGame(double deltaTime)
     {
         if (state == State.PAUSED || state == State.ENDED) {
-            return; /* This is necessary because the loop keeps running even when the game is paused or stopped */
+            return; /* This is necessary because the loop keeps running even when the game is paused or stopped. */
         }
         
         player.update(deltaTime);
@@ -190,7 +204,7 @@ public class Game
         ai.update(deltaTime);
     }
     
-    /* Collision detection */
+    /* --- Collision detection --- */
     
     private void keepPaddleInBounds(Paddle paddle)
     {
@@ -226,45 +240,42 @@ public class Game
         } else {
             ballHitEdge = ball.getX() + BALL_SIZE > WIDTH - MARGIN_LEFT_RIGHT - GOAL_WIDTH;
         }
-        
         if (!ballHitEdge) {
             return;
         }
         
         boolean ballHitPaddle = ball.getY() + BALL_SIZE > paddle.getY() && ball.getY() < paddle.getY() + PADDLE_HEIGHT;
-        
         if (ballHitPaddle) {
             
-            /* Find out what section of the paddle was hit */
-            
+            /*
+             * Find out what section of the paddle was hit.
+             */
             for (int i = 0; i < PADDLE_SECTIONS; i++) {
-                boolean ballHitCurrentSection = ball.getY() < paddle.getY() + (i + 0.5) * BALL_SIZE;
+                boolean ballHitCurrentSection = ball.getY() < paddle.getY() + (i + 0.5) * PADDLE_SECTION_HEIGHT;
                 if (ballHitCurrentSection) {
                     ball.setAngle(PADDLE_SECTION_ANGLES[i] * (paddle == opponent ? -1 : 1));
-                    break; /* Found our match */
-                } else if (i == PADDLE_SECTIONS - 1) { /* Must be the last one then */
+                    break; /* Found our match. */
+                } else if (i == PADDLE_SECTIONS - 1) { /* If we haven't found our match by now, it must be the last section. */
                     ball.setAngle(PADDLE_SECTION_ANGLES[i] * (paddle == opponent ? -1 : 1));
                 }
             }
             
-            /* Update speed */
-            
+            /*
+             * Update and reposition the ball.
+             */
             ball.setSpeed(ball.getSpeed() * BALL_SPEED_INCREASE);
-            
-            /* Reposition ball */
-            
             if (paddle == player) {
                 ball.setX(MARGIN_LEFT_RIGHT + GOAL_WIDTH);
             } else {
                 ball.setX(WIDTH - MARGIN_LEFT_RIGHT - GOAL_WIDTH - BALL_SIZE);
             }
-                        
             new AudioClip(Sounds.HIT_PADDLE).play();
             
         } else {
             
-            /* Update score */
-            
+            /*
+             * Update the score.
+             */
             if (paddle == opponent) {
                 player.setScore(player.getScore() + 1);
                 new AudioClip(Sounds.SCORE_PLAYER).play();
@@ -273,9 +284,10 @@ public class Game
                 new AudioClip(Sounds.SCORE_OPPONENT).play();
             }
             
-            /* Check for game end */
-            
-            if (player.getScore() == maxScore || opponent.getScore() == maxScore) {
+            /*
+             * Check if the game has ended. If not, play another round.
+             */
+            if (player.getScore() == winningScore || opponent.getScore() == winningScore) {
                 state = State.ENDED;
                 onGameEnd.run();
             } else {

@@ -20,7 +20,7 @@ package svanimpe.pong.objects;
 
 public class Ball extends GameObject
 {
-    /* Construction and final properties */
+    /* --- Construction and final properties --- */
     
     private final double maxSpeed;
 
@@ -28,8 +28,13 @@ public class Ball extends GameObject
     {
         this.maxSpeed = maxSpeed;
     }
+
+    public double getMaxSpeed()
+    {
+        return maxSpeed;
+    }
     
-    /* Angle (in radians) */
+    /* --- Angle (in radians) --- */
     
     private double angle = 0;
 
@@ -43,7 +48,7 @@ public class Ball extends GameObject
         this.angle = angle;
     }
     
-    /* Speed */
+    /* --- Speed --- */
     
     private double speed = 0;
 
@@ -61,7 +66,7 @@ public class Ball extends GameObject
         }
     }
     
-    /* Update */
+    /* --- Update --- */
     
     @Override
     public void update(double deltaTime)

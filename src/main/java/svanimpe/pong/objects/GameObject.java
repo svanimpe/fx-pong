@@ -23,7 +23,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 
 public abstract class GameObject
 {
-    /* X */
+    /* --- Position --- */
     
     private final DoubleProperty x = new SimpleDoubleProperty(0);
     
@@ -42,8 +42,6 @@ public abstract class GameObject
         return x;
     }
     
-    /* Y */
-    
     private final DoubleProperty y = new SimpleDoubleProperty(0);
     
     public double getY()
@@ -61,7 +59,11 @@ public abstract class GameObject
         return y;
     }
     
-    /* Update */
+    /* --- Update --- */
     
+    /*
+     * Updates the position of the object based on the amount of time (in seconds) passed since the
+     * previous update.
+     */
     public abstract void update(double deltaTime);
 }

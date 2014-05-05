@@ -25,16 +25,16 @@ import static svanimpe.pong.Constants.*;
 
 public class DefaultAi extends PaddleAi
 {
-    /* Construction and final properties */
+    /* --- Construction and final properties --- */
     
-    private final double timeBetweenUpdates = 0.2;
+    private static final double timeBetweenUpdates = 0.2;
     
     public DefaultAi(Paddle paddle, Game game)
     {
         super(paddle, game);
     }
 
-    /* Update */
+    /* --- Update --- */
     
     private double timeSinceLastUpdate = 0;
     
@@ -44,26 +44,27 @@ public class DefaultAi extends PaddleAi
         timeSinceLastUpdate += deltaTime;
         
         if (timeSinceLastUpdate < timeBetweenUpdates) {
-            return; /* Wait a while longer */
+            return; /* Wait a while longer. */
         }
         
         timeSinceLastUpdate -= timeBetweenUpdates;
         
         double distanceFromPaddle = getPaddle().getX() - getGame().getBall().getX();
         
-        /* Do nothing if the ball is not moving towards us */
-        
+        /*
+         * Do nothing if the ball is not moving towards us.
+         */
         if (Math.signum(distanceFromPaddle) != Math.signum(getGame().getBall().getSpeed())) {
             getPaddle().setMovement(Paddle.Movement.NONE);
             return;
         }
 
-        /* Find out where the ball is heading for and move in that direction (this does not look ahead past collisions) */
-        
+        /*
+         * Find out where the ball is heading for and move in that direction (this does not look
+         * ahead past collisions).
+         */
         double targetY = getGame().getBall().getY() + distanceFromPaddle * Math.tan(getGame().getBall().getAngle());
-
         boolean paddleOnTarget = targetY >= getPaddle().getY() && targetY + BALL_SIZE <= getPaddle().getY() + PADDLE_HEIGHT;
-        
         if (paddleOnTarget) {
             getPaddle().setMovement(Paddle.Movement.NONE);
         } else if (targetY < getPaddle().getY()) {
