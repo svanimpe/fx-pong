@@ -56,7 +56,7 @@ public class Game
     private class GameLoop extends AnimationTimer
     {
         private long previousTime = 0;
-
+        
         @Override
         public void handle(long currentTime)
         {
