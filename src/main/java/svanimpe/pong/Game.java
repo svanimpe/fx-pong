@@ -99,7 +99,11 @@ public class Game
         return state;
     }
 
-    private Runnable onGameEnd = () -> {}; /* Do nothing for now. */
+    private Runnable onGameEnd = new Runnable()
+    {
+        @Override
+        public void run() { } /* Do nothing for now. */
+    };
     
     public void setOnGameEnd(Runnable onGameEnd)
     {

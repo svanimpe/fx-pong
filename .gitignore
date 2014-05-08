@@ -1,5 +1,5 @@
 target/
-nbactions.xml
+#nbactions.xml
 nb-configuration.xml
 
 # OS X #

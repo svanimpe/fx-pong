@@ -19,7 +19,11 @@
 package svanimpe.pong.ui;
 
 import javafx.application.Platform;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
@@ -27,7 +31,11 @@ import static svanimpe.pong.Constants.*;
 
 public class EndScreen extends Pane
 {
-    private Runnable onRestart = () -> {}; /* Do nothing for now. */
+    private Runnable onRestart = new Runnable()
+    {
+        @Override
+        public void run() { } /* Do nothing for now. */
+    };
     
     public void setOnRestart(Runnable onRestart)
     {
@@ -43,28 +51,36 @@ public class EndScreen extends Pane
     
     public EndScreen()
     {
-        header.boundsInLocalProperty().addListener(observable ->
+        header.boundsInLocalProperty().addListener(new InvalidationListener()
         {
-            /*
-             * When using CSS, the width and height (with CSS applied) aren't available right away.
-             * Therefore, we listen for changes and update the position once the width and height
-             * are available.
-             */
-            header.setTranslateX((WIDTH - header.getBoundsInLocal().getWidth()) / 2); /* Centered. */
-            header.setTranslateY(TEXT_MARGIN_TOP_BOTTOM);
+            @Override
+            public void invalidated(Observable observable)
+            {
+                /*
+                 * When using CSS, the width and height (with CSS applied) aren't available right
+                 * away. Therefore, we listen for changes and update the position once the width and
+                 * height are available.
+                 */
+                header.setTranslateX((WIDTH - header.getBoundsInLocal().getWidth()) / 2); /* Centered. */
+                header.setTranslateY(TEXT_MARGIN_TOP_BOTTOM);
+            }
         });
         header.getStyleClass().add("header");
         
-        Text info = new Text("press enter to restart\npress escape to quit");
-        info.boundsInLocalProperty().addListener(observable ->
+        final Text info = new Text("press enter to restart\npress escape to quit");
+        info.boundsInLocalProperty().addListener(new InvalidationListener()
         {
-            /*
-             * When using CSS, the width and height (with CSS applied) aren't available right away.
-             * Therefore, we listen for changes and update the position once the width and height
-             * are available.
-             */
-            info.setTranslateX((WIDTH - info.getBoundsInLocal().getWidth()) / 2); /* Centered. */
-            info.setTranslateY(HEIGHT - TEXT_MARGIN_TOP_BOTTOM - info.getBoundsInLocal().getHeight());
+            @Override
+            public void invalidated(Observable observable)
+            {
+                /*
+                 * When using CSS, the width and height (with CSS applied) aren't available right
+                 * away. Therefore, we listen for changes and update the position once the width and
+                 * height are available.
+                 */
+                info.setTranslateX((WIDTH - info.getBoundsInLocal().getWidth()) / 2); /* Centered. */
+                info.setTranslateY(HEIGHT - TEXT_MARGIN_TOP_BOTTOM - info.getBoundsInLocal().getHeight());
+            }
         });
         info.getStyleClass().add("info");
         
@@ -72,12 +88,16 @@ public class EndScreen extends Pane
         getChildren().addAll(header, info);
         getStyleClass().add("screen");
         
-        setOnKeyPressed(event ->
+        setOnKeyPressed(new EventHandler<KeyEvent>()
         {
-            if (event.getCode() == KeyCode.ENTER) {
-                onRestart.run();
-            } else if (event.getCode() == KeyCode.ESCAPE) {
-                Platform.exit();
+            @Override
+            public void handle(KeyEvent event)
+            {
+                if (event.getCode() == KeyCode.ENTER) {
+                    onRestart.run();
+                } else if (event.getCode() == KeyCode.ESCAPE) {
+                    Platform.exit();
+                }
             }
         });
     }

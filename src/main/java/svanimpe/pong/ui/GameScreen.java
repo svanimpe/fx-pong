@@ -18,6 +18,9 @@
 
 package svanimpe.pong.ui;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -40,7 +43,7 @@ public class GameScreen extends Pane
     private final Text playerScore = new Text("0");
     private final Text opponentScore = new Text("0");
     
-    public GameScreen(Game game)
+    public GameScreen(final Game game)
     {
         this.game = game;
         
@@ -57,14 +60,18 @@ public class GameScreen extends Pane
         opponent.getStyleClass().add("paddle");
         
         playerScore.textProperty().bind(game.getPlayer().scoreProperty().asString());
-        playerScore.boundsInLocalProperty().addListener(observable ->
+        playerScore.boundsInLocalProperty().addListener(new InvalidationListener()
         {
-            /*
-             * When using CSS, the width and height (with CSS applied) aren't available right away.
-             * Therefore, we listen for changes and update the position once the width and height
-             * are available.
-             */
-            playerScore.setTranslateX(WIDTH / 2 - SCORE_SPACING / 2 - playerScore.getBoundsInLocal().getWidth());
+            @Override
+            public void invalidated(Observable observable)
+            {
+                /*
+                 * When using CSS, the width and height (with CSS applied) aren't available right
+                 * away. Therefore, we listen for changes and update the position once the width and
+                 * height are available.
+                 */
+                playerScore.setTranslateX(WIDTH / 2 - SCORE_SPACING / 2 - playerScore.getBoundsInLocal().getWidth());
+            }
         });
         playerScore.setTranslateY(TEXT_MARGIN_TOP_BOTTOM);
         playerScore.getStyleClass().add("score");
@@ -78,29 +85,34 @@ public class GameScreen extends Pane
         getChildren().addAll(ball, player, opponent, playerScore, opponentScore);
         getStyleClass().add("screen");
         
-        setOnKeyPressed(this::keyPressed);
-        setOnKeyReleased(this::keyReleased);
-    }
-    
-    private void keyPressed(KeyEvent event)
-    {
-        if (event.getCode() == KeyCode.P) {
-            game.pause();
-        } else if (event.getCode() == KeyCode.ESCAPE) {
-            game.forfeit();
-        } else if (game.getPlayer().getMovement() == Paddle.Movement.NONE && event.getCode() == KeyCode.UP) {
-            game.getPlayer().setMovement(Movement.UP);
-        } else if (game.getPlayer().getMovement() == Movement.NONE && event.getCode() == KeyCode.DOWN) {
-            game.getPlayer().setMovement(Movement.DOWN);
-        }
-    }
-
-    private void keyReleased(KeyEvent event)
-    {
-        if (game.getPlayer().getMovement() == Movement.UP && event.getCode() == KeyCode.UP) {
-            game.getPlayer().setMovement(Movement.NONE);
-        } else if (game.getPlayer().getMovement() == Movement.DOWN && event.getCode() == KeyCode.DOWN) {
-            game.getPlayer().setMovement(Movement.NONE);
-        }
+        setOnKeyPressed(new EventHandler<KeyEvent>()
+        {
+            @Override
+            public void handle(KeyEvent event)
+            {
+                if (event.getCode() == KeyCode.P) {
+                    game.pause();
+                } else if (event.getCode() == KeyCode.ESCAPE) {
+                    game.forfeit();
+                } else if (game.getPlayer().getMovement() == Paddle.Movement.NONE && event.getCode() == KeyCode.UP) {
+                    game.getPlayer().setMovement(Movement.UP);
+                } else if (game.getPlayer().getMovement() == Movement.NONE && event.getCode() == KeyCode.DOWN) {
+                    game.getPlayer().setMovement(Movement.DOWN);
+                }
+            }
+        });
+        
+        setOnKeyReleased(new EventHandler<KeyEvent>()
+        {
+            @Override
+            public void handle(KeyEvent event)
+            {
+                if (game.getPlayer().getMovement() == Movement.UP && event.getCode() == KeyCode.UP) {
+                    game.getPlayer().setMovement(Movement.NONE);
+                } else if (game.getPlayer().getMovement() == Movement.DOWN && event.getCode() == KeyCode.DOWN) {
+                    game.getPlayer().setMovement(Movement.NONE);
+                }
+            }
+        });
     }
 }
