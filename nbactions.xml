@@ -15,18 +15,46 @@
         </properties>
     </action>
     <action>
-            <actionName>debug</actionName>
-            <packagings>
-                <packaging>jar</packaging>
-            </packagings>
-            <goals>
-                <goal>process-classes</goal>
-                <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
-            </goals>
-            <properties>
-                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath -Xbootclasspath/a:"${env.JAVA_HOME}/jre/lib/jfxrt.jar" ${packageClassName}</exec.args>
-                <exec.executable>java</exec.executable>
-                <jpda.listen>true</jpda.listen>
-            </properties>
-        </action>
+        <actionName>debug</actionName>
+        <packagings>
+            <packaging>jar</packaging>
+        </packagings>
+        <goals>
+            <goal>process-classes</goal>
+            <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
+        </goals>
+        <properties>
+            <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -classpath %classpath -Xbootclasspath/a:"${env.JAVA_HOME}/jre/lib/jfxrt.jar" ${packageClassName}</exec.args>
+            <exec.executable>java</exec.executable>
+            <jpda.listen>true</jpda.listen>
+        </properties>
+    </action>
+    <action>
+        <actionName>CUSTOM-device</actionName>
+        <displayName>Run on device</displayName>
+        <goals>
+            <goal>robovm:ios-device</goal>
+        </goals>
+    </action>
+    <action>
+        <actionName>CUSTOM-iphone</actionName>
+        <displayName>Run on iPhone simulator</displayName>
+        <goals>
+            <goal>robovm:iphone-sim</goal>
+        </goals>
+    </action>
+    <action>
+        <actionName>CUSTOM-ipad</actionName>
+        <displayName>Run on iPad simulator</displayName>
+        <goals>
+            <goal>robovm:ipad-sim</goal>
+        </goals>
+    </action>
+    <action>
+        <actionName>CUSTOM-ipa</actionName>
+        <displayName>Build IPA</displayName>
+        <goals>
+            <goal>robovm:create-ipa</goal>
+        </goals>
+    </action>
 </actions>

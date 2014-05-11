@@ -18,12 +18,10 @@
 
 package svanimpe.pong.ui;
 
-import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.event.EventHandler;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.TouchEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
@@ -44,7 +42,7 @@ public class WelcomeScreen extends Pane
     
     public WelcomeScreen()
     {
-        final Text header = new Text("pong");
+        final Text header = new Text("retro game\ni");
         header.boundsInLocalProperty().addListener(new InvalidationListener()
         {
             @Override
@@ -61,7 +59,7 @@ public class WelcomeScreen extends Pane
         });
         header.getStyleClass().add("header");
         
-        final Text info = new Text("use the arrow keys to move\npress p to pause\n\npress enter to start\npress escape to quit");
+        final Text info = new Text("tap to start");
         info.boundsInLocalProperty().addListener(new InvalidationListener()
         {
             @Override
@@ -82,16 +80,12 @@ public class WelcomeScreen extends Pane
         getChildren().addAll(header, info);
         getStyleClass().add("screen");
         
-        setOnKeyPressed(new EventHandler<KeyEvent>()
+        setOnTouchPressed(new EventHandler<TouchEvent>()
         {
             @Override
-            public void handle(KeyEvent event)
+            public void handle(TouchEvent event)
             {
-                if (event.getCode() == KeyCode.ENTER) {
-                    onStart.run();
-                } else if (event.getCode() == KeyCode.ESCAPE) {
-                    Platform.exit();
-                }
+                onStart.run();
             }
         });
     }

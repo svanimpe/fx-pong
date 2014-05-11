@@ -37,7 +37,7 @@ public class Pong extends Application
     @Override
     public void start(Stage stage)
     {
-        Font.loadFont(getClass().getResourceAsStream("/arcade-normal.ttf"), 0); /* Font family 'Arcade Normal' in CSS. */
+        Font.loadFont(getClass().getResource("/arcade-normal.ttf").toExternalForm(), 0); /* Font family 'Arcade Normal' in CSS. */
         
         final Game game = new Game(WINNING_SCORE);
         
@@ -57,7 +57,6 @@ public class Pong extends Application
             {
                 content.getChildren().clear();
                 content.getChildren().add(gameScreen);
-                gameScreen.requestFocus();
                 game.start();
             }
         });
@@ -68,7 +67,6 @@ public class Pong extends Application
             {
                 content.getChildren().clear();
                 content.getChildren().add(endScreen);
-                endScreen.requestFocus();
                 endScreen.setScore(game.getPlayer().getScore());
             }
         });
@@ -79,7 +77,6 @@ public class Pong extends Application
             {
                 content.getChildren().clear();
                 content.getChildren().add(gameScreen);
-                gameScreen.requestFocus();
                 game.start();
             }
         });
@@ -139,10 +136,7 @@ public class Pong extends Application
         scene.heightProperty().addListener(updateScale);
         
         stage.setScene(scene);
-        stage.setTitle("Pong");
         stage.show();
-        
-        welcomeScreen.requestFocus(); /* This step is necessary to receive keyboard input. */
     }
     
     public static void main(String... args)

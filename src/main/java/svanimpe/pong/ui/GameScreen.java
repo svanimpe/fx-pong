@@ -21,21 +21,17 @@ package svanimpe.pong.ui;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.event.EventHandler;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.input.TouchEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import svanimpe.pong.Game;
 import svanimpe.pong.objects.Paddle;
-import svanimpe.pong.objects.Paddle.Movement;
 
 import static svanimpe.pong.Constants.*;
 
 public class GameScreen extends Pane
 {
-    private final Game game;
-    
     private final Rectangle ball = new Rectangle(BALL_SIZE, BALL_SIZE);
     private final Rectangle player = new Rectangle(PADDLE_WIDTH, PADDLE_HEIGHT);
     private final Rectangle opponent = new Rectangle(PADDLE_WIDTH, PADDLE_HEIGHT);
@@ -45,8 +41,6 @@ public class GameScreen extends Pane
     
     public GameScreen(final Game game)
     {
-        this.game = game;
-        
         ball.translateXProperty().bind(game.getBall().xProperty());
         ball.translateYProperty().bind(game.getBall().yProperty());
         ball.getStyleClass().add("ball");
@@ -85,33 +79,33 @@ public class GameScreen extends Pane
         getChildren().addAll(ball, player, opponent, playerScore, opponentScore);
         getStyleClass().add("screen");
         
-        setOnKeyPressed(new EventHandler<KeyEvent>()
+        setOnTouchPressed(new EventHandler<TouchEvent>()
         {
             @Override
-            public void handle(KeyEvent event)
+            public void handle(TouchEvent event)
             {
-                if (event.getCode() == KeyCode.P) {
-                    game.pause();
-                } else if (event.getCode() == KeyCode.ESCAPE) {
-                    game.forfeit();
-                } else if (game.getPlayer().getMovement() == Paddle.Movement.NONE && event.getCode() == KeyCode.UP) {
-                    game.getPlayer().setMovement(Movement.UP);
-                } else if (game.getPlayer().getMovement() == Movement.NONE && event.getCode() == KeyCode.DOWN) {
-                    game.getPlayer().setMovement(Movement.DOWN);
+                /*
+                 * Ignore multi-touch events.
+                 */
+                if (event.getTouchCount() != 1) {
+                    return;
+                }
+                
+                double touchY = event.getTouchPoint().getSceneY();
+                double playerY = player.localToScene(0, PADDLE_HEIGHT / 2).getY();
+                if (touchY > playerY) {
+                    game.getPlayer().setMovement(Paddle.Movement.DOWN);
+                } else {
+                    game.getPlayer().setMovement(Paddle.Movement.UP);
                 }
             }
         });
-        
-        setOnKeyReleased(new EventHandler<KeyEvent>()
+        setOnTouchReleased(new EventHandler<TouchEvent>()
         {
             @Override
-            public void handle(KeyEvent event)
+            public void handle(TouchEvent event)
             {
-                if (game.getPlayer().getMovement() == Movement.UP && event.getCode() == KeyCode.UP) {
-                    game.getPlayer().setMovement(Movement.NONE);
-                } else if (game.getPlayer().getMovement() == Movement.DOWN && event.getCode() == KeyCode.DOWN) {
-                    game.getPlayer().setMovement(Movement.NONE);
-                }
+                game.getPlayer().setMovement(Paddle.Movement.NONE);
             }
         });
     }

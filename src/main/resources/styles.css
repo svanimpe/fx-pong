@@ -17,7 +17,8 @@
 
 .header
 {
-    -fx-font-size: 48px;
+    -fx-font-size: 42px;
+    -fx-text-alignment: center;
 }
 
 .info

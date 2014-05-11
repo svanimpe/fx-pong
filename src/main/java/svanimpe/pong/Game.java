@@ -20,7 +20,6 @@ package svanimpe.pong;
 
 import java.util.Random;
 import javafx.animation.AnimationTimer;
-import javafx.scene.media.AudioClip;
 import svanimpe.pong.ai.DefaultAi;
 import svanimpe.pong.ai.PaddleAi;
 import svanimpe.pong.objects.Ball;
@@ -226,7 +225,6 @@ public class Game
         
         if (ballHitTopWall || ballHitBottomWall) {
             ball.setAngle(ball.getAngle() * -1);
-            new AudioClip(Sounds.HIT_WALL).play();
         }
         
         if (ballHitTopWall) {
@@ -273,8 +271,6 @@ public class Game
             } else {
                 ball.setX(WIDTH - MARGIN_LEFT_RIGHT - GOAL_WIDTH - BALL_SIZE);
             }
-            new AudioClip(Sounds.HIT_PADDLE).play();
-            
         } else {
             
             /*
@@ -282,10 +278,8 @@ public class Game
              */
             if (paddle == opponent) {
                 player.setScore(player.getScore() + 1);
-                new AudioClip(Sounds.SCORE_PLAYER).play();
             } else {
                 opponent.setScore(opponent.getScore() + 1);
-                new AudioClip(Sounds.SCORE_OPPONENT).play();
             }
             
             /*

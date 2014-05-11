@@ -17,6 +17,23 @@
         <mainClass>svanimpe.pong.ui.Pong</mainClass>
     </properties>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.robovm</groupId>
+                <artifactId>robovm-maven-plugin</artifactId>
+                <version>0.0.12.1</version>
+                <configuration>
+                    <propertiesFile>robovm.properties</propertiesFile>
+                    <configFile>robovm.xml</configFile>
+                    <includeJFX>true</includeJFX>
+<!--                    <iosSignIdentity>iPhone Distribution</iosSignIdentity>
+                    <iosProvisioningProfile>F40BF4FD-D09A-4548-8667-EE6E819D3755</iosProvisioningProfile>-->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>com.oracle</groupId>
@@ -24,6 +41,16 @@
             <version>2.2</version>
             <scope>system</scope>
             <systemPath>${java.home}/lib/jfxrt.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.robovm</groupId>
+            <artifactId>robovm-rt</artifactId>
+            <version>0.0.12</version>
+        </dependency>
+        <dependency>
+            <groupId>org.robovm</groupId>
+            <artifactId>robovm-cocoatouch</artifactId>
+            <version>0.0.12</version>
         </dependency>
     </dependencies>
 </project>
