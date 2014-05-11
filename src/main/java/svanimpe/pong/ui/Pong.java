@@ -36,7 +36,7 @@ public class Pong extends Application
     @Override
     public void start(Stage stage)
     {
-        Font.loadFont(getClass().getResourceAsStream("/arcade-normal.ttf"), 0); /* Font family 'Arcade Normal' in CSS. */
+        Font.loadFont(getClass().getResource("/arcade-normal.ttf").toExternalForm(), 0); /* Font family 'Arcade Normal' in CSS. */
         
         Game game = new Game(WINNING_SCORE);
         
