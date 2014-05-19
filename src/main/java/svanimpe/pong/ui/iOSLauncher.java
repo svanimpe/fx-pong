@@ -1,12 +1,12 @@
 package svanimpe.pong.ui;
 
 import javafx.application.Application;
-import org.robovm.cocoatouch.foundation.NSAutoreleasePool;
-import org.robovm.cocoatouch.foundation.NSDictionary;
-import org.robovm.cocoatouch.uikit.UIApplication;
-import org.robovm.cocoatouch.uikit.UIApplicationDelegate;
+import org.robovm.apple.foundation.NSAutoreleasePool;
+import org.robovm.apple.foundation.NSDictionary;
+import org.robovm.apple.uikit.UIApplication;
+import org.robovm.apple.uikit.UIApplicationDelegateAdapter;
 
-public class iOSLauncher extends UIApplicationDelegate.Adapter
+public class iOSLauncher extends UIApplicationDelegateAdapter
 {
     @Override
     public boolean didFinishLaunching(UIApplication application, NSDictionary launchOptions)
