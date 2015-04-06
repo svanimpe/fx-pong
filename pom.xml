@@ -40,7 +40,7 @@
             <artifactId>javafx</artifactId>
             <version>2.2</version>
             <scope>system</scope>
-            <systemPath>${java.home}/lib/jfxrt.jar</systemPath>
+            <systemPath>${jfxrt.jar}</systemPath>
         </dependency>
         <dependency>
             <groupId>org.robovm</groupId>
@@ -53,4 +53,30 @@
             <version>0.0.12</version>
         </dependency>
     </dependencies>
+    
+    <profiles>
+        <profile>
+            <id>jdk8</id>
+            <activation>
+                <file>
+                    <exists>${java.home}/lib/ext/jfxrt.jar</exists>
+                </file>
+            </activation>
+            <properties>
+                <jfxrt.jar>${java.home}/lib/ext/jfxrt.jar</jfxrt.jar>
+            </properties>
+        </profile>
+        <profile>
+            <id>jdk7</id>
+            <activation>
+                <file>
+                    <exists>${java.home}/lib/jfxrt.jar</exists>
+                </file>
+            </activation>
+            <properties>
+                <jfxrt.jar>${java.home}/lib/jfxrt.jar</jfxrt.jar>
+            </properties>
+        </profile>
+    </profiles>
+    
 </project>
